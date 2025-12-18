@@ -8,7 +8,7 @@
 
 ---
 
-## ⭐ Top 10 Most Relevant Papers
+## Top 10 Most Relevant Papers
 
 > **Context**: This section highlights the 10 papers most directly relevant to understanding SpecGD as *steepest descent in the spectral norm*, deriving norm-smoothness-based convergence bounds, and establishing "when SpecGD beats GD" criteria in terms of effective rank/singular-value spread. These papers also emphasize rotational invariance as the key geometric distinction from SignSGD.
 
@@ -22,7 +22,7 @@
 **Critical insights**:
 - Their core condition is *still* largely a **one-step guarantee**; it explains *when a spectral step is locally better*, not full training dynamics or final generalization.
 - **Also**: They focus on the **canonical spectral update (polar factor)**; practical Muon details (momentum, approximations, layerwise scaling tricks) are treated as motivation rather than fully analyzed.
-- **How it plugs in**: The smoothness-ratio term (L₂/L_spec) can be made *concrete* for linear layers via their (|A|_op²) vs (|A|_F²) factors, which is where stable rank naturally appears.
+- **How it plugs in**: The smoothness-ratio term ($L_2/L_{\text{spec}}$) can be made *concrete* for linear layers via their ($|A|_{\text{op}}^2$) vs ($|A|_F^2$) factors, which is where stable rank naturally appears.
 
 </details>
 
@@ -35,7 +35,7 @@
 
 **Critical insights**:
 - **Key takeaway for rotation experiment**: They isolate why sign methods can be good *when the Hessian is diagonally concentrated and highly anisotropic*—a fundamentally **coordinate-dependent** condition, which motivates the rotational-invariance pitch for spectral geometry.
-- **Limitation to flag**: Their "good regime" relies on **axis alignment** (via ℓ_∞-smoothness / diagonal structure). This is the right foil for the "spectral geometry is rotation invariant" claim, but it also means one should be careful not to claim that *any* non-Euclidean geometry is automatically "better"—it depends on *matching the right invariances*.
+- **Limitation to flag**: Their "good regime" relies on **axis alignment** (via $\ell_\infty$-smoothness / diagonal structure). This is the right foil for the "spectral geometry is rotation invariant" claim, but it also means one should be careful not to claim that *any* non-Euclidean geometry is automatically "better"—it depends on *matching the right invariances*.
 
 </details>
 
@@ -58,7 +58,7 @@
 
 [Paper Link](https://papers.neurips.cc/paper/2015/hash/8e6b42f1644ecb1327dc03ab345e618b-Abstract.html)
 
-**Why it's central**: This is the "classical" deep-learning origin of **spectral (Schatten-∞) steepest descent / SSD-style updates**, predating Muon. It already argues that non-Euclidean norms (including spectral) can give tighter progress bounds than Frobenius in certain models.
+**Why it's central**: This is the "classical" deep-learning origin of **spectral (Schatten-$\infty$) steepest descent / SSD-style updates**, predating Muon. It already argues that non-Euclidean norms (including spectral) can give tighter progress bounds than Frobenius in certain models.
 
 **Critical insights**:
 - **Why it matters**: It's the strongest prior art to cite when claiming "spectral-norm geometry as a first-class optimizer design choice."
@@ -98,7 +98,7 @@
 
 [Paper Link](https://arxiv.org/abs/2506.15054)
 
-**Why it's central**: It formalizes Muon within the **Lion-𝒦** family and argues Muon + decoupled weight decay implicitly solves a **spectral norm constrained** problem; i.e., it gives a theory story for **implicit regularization** tied exactly to spectral norms.
+**Why it's central**: It formalizes Muon within the **Lion-$\mathcal{K}$** family and argues Muon + decoupled weight decay implicitly solves a **spectral norm constrained** problem; i.e., it gives a theory story for **implicit regularization** tied exactly to spectral norms.
 
 **Critical insights**:
 - **Strength**: This is the cleanest citation for any claim like "Muon has an implicit spectral-norm control / constraint viewpoint."
@@ -140,7 +140,7 @@
 **Why it's central**: This is the foundational signSGD convergence+geometry paper (and the majority-vote paper is key if mentioning robustness/communication). It explicitly compares to SignSGD.
 
 **Critical insights**:
-- **Most relevant bit**: They already emphasize that **(ℓ₁/ℓ₂)-type geometry of gradients/noise/curvature** matters for sign methods, which is conceptually parallel to the "nuclear/Frobenius ratio" criterion for spectral methods.
+- **Most relevant bit**: They already emphasize that **$(\ell_1/\ell_2)$-type geometry of gradients/noise/curvature** matters for sign methods, which is conceptually parallel to the "nuclear/Frobenius ratio" criterion for spectral methods.
 - **Caveat**: Many theoretical regimes rely on assumptions (sometimes large-batch or specific noise models) that don't directly map to deterministic smoothness comparison, so avoid overclaiming equivalence.
 
 </details>
@@ -156,7 +156,7 @@
 
 ##  Table of Contents
 
-- [⭐ Top 10 Most Relevant Papers](#-top-10-most-relevant-papers-for-specgd-proposal)
+- [ Top 10 Most Relevant Papers](#-top-10-most-relevant-papers-for-specgd-proposal)
 - [ Background: Spectral Bias and Adaptive Optimizers](#-background-spectral-bias-and-adaptive-optimizers)
 - [ Original Literature](#-original-literature)
 - [ Theoretical Analysis](#-theoretical-analysis)
@@ -370,9 +370,9 @@ starting from $Z_0 = G/\|G\|$. Avoids expensive SVD computation while achieving 
 
 **Theoretical framework**: Places Muon within the Lion-K family of optimizers, showing Muon corresponds to Lion-K equipped with the nuclear norm (K is sum of singular values).
 
-**Core result**: Proves that Muon with decoupled weight decay implicitly solves the constrained optimization problem: min f(W) subject to ||W||_σ ≤ C, where ||W||_σ is the spectral norm (largest singular value) and C is a constant determined by the weight decay coefficient.
+**Core result**: Proves that Muon with decoupled weight decay implicitly solves the constrained optimization problem: min f(W) subject to $\|W\|_\sigma \leq C$, where $\|W\|_\sigma$ is the spectral norm (largest singular value) and C is a constant determined by the weight decay coefficient.
 
-**Mechanism**: The orthogonalization step acts as a projection onto the constraint manifold {W: ||W||_σ = C}, similar to projected gradient descent. Each update doesn't increase the spectral norm—it stays within the spectral norm ball.
+**Mechanism**: The orthogonalization step acts as a projection onto the constraint manifold $\{W: \|W\|_\sigma = C\}$, similar to projected gradient descent. Each update doesn't increase the spectral norm—it stays within the spectral norm ball.
 
 **Implications**:
 1. Controls model capacity through spectral norm bounds (related to Lipschitz constant)
@@ -406,7 +406,7 @@ starting from $Z_0 = G/\|G\|$. Avoids expensive SVD computation while achieving 
 
 **Core finding**: Standard GD learns principal components sequentially (dominant first), while Muon/Shampoo learn all components at similar rates, creating more balanced feature learning.
 
-**Theoretical model**: Introduces idealized Spectral Gradient Descent (SpecGD) that computes G = UΣV^T and updates with UV^T (equalized singular values). Proves in Gaussian-mixture classification with imbalance, GD prioritizes top principal component while SpecGD learns all components simultaneously. Effect amplifies with network depth.
+**Theoretical model**: Introduces idealized Spectral Gradient Descent (SpecGD) that computes $G = U\Sigma V^T$ and updates with $UV^T$ (equalized singular values). Proves in Gaussian-mixture classification with imbalance, GD prioritizes top principal component while SpecGD learns all components simultaneously. Effect amplifies with network depth.
 
 **Concrete improvements**: On vision datasets with class imbalance (e.g., 100:1 ratio), Muon achieved over 5% higher balanced accuracy than AdamW. This gap appears early in training and persists, showing Muon learns minority-class features from the start rather than late in training.
 
@@ -464,8 +464,8 @@ The x-axis = number of training iterations. The y-axis = how close the model's c
 
 | Panel | Optimizer | Which margin increases the most? | Meaning |
 |:------|:-----------|:--------------------------------|:---------|
-| (a) SignGD | Max-norm (blue) | The blue curve rises and dominates | SignGD naturally prefers the **L∞ margin** — consistent with its L∞ geometry. |
-| (b) NGD | L₂ (orange) | The orange curve rises and dominates | Gradient descent converges to the **L₂ max-margin separator** — the classical result. |
+| (a) SignGD | Max-norm (blue) | The blue curve rises and dominates | SignGD naturally prefers the **$L_\infty$ margin** — consistent with its $L_\infty$ geometry. |
+| (b) NGD | $L_2$ (orange) | The orange curve rises and dominates | Gradient descent converges to the **$L_2$ max-margin separator** — the classical result. |
 | (c) Spectral-GD | Spectral (green) | The green curve rises highest | Spectral Descent converges to the **spectral-norm margin** — i.e., the smallest dominant singular value. |
 | (d) Muon | Spectral (green) | Same as Spectral-GD | Muon behaves just like Spectral Descent — it maximizes the **spectral margin**. |
 
