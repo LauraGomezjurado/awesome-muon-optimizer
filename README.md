@@ -8,8 +8,155 @@
 
 ---
 
+## ⭐ Top 10 Most Relevant Papers for SpecGD Proposal
+
+> **Context**: This section highlights the 10 papers most directly relevant to understanding SpecGD as *steepest descent in the spectral norm*, deriving norm-smoothness-based convergence bounds, and establishing "when SpecGD beats GD" criteria in terms of effective rank/singular-value spread. These papers also emphasize rotational invariance as the key geometric distinction from SignSGD.
+
+<details>
+<summary><b>1. When do spectral gradient updates help in deep learning?</b> — <i>Davis & Drusvyatskiy (2025)</i></summary>
+
+[Paper Link](https://arxiv.org/abs/2512.04299)
+
+**Why it's central**: This paper provides the "missing empirical and theory bridge" for the **SpecGD>GD** condition. It gives a clean *layerwise* criterion comparing a **gradient nuclear-to-Frobenius ratio** ("nuclear rank") to **stable rank of activations**, and validates the low-stable-rank / high-nuclear-rank story on NanoGPT-scale training.
+
+**Critical insights**:
+- Their core condition is *still* largely a **one-step guarantee**; it explains *when a spectral step is locally better*, not full training dynamics or final generalization.
+- **Also**: They focus on the **canonical spectral update (polar factor)**; practical Muon details (momentum, approximations, layerwise scaling tricks) are treated as motivation rather than fully analyzed.
+- **How it plugs in**: The smoothness-ratio term (L₂/L_spec) can be made *concrete* for linear layers via their (|A|_op²) vs (|A|_F²) factors, which is where stable rank naturally appears.
+
+</details>
+
+<details>
+<summary><b>2. The Geometry of Sign Gradient Descent</b> — <i>Balles, Pedregosa, Le Roux (2020)</i></summary>
+
+[Paper Link](https://arxiv.org/abs/2002.08056)
+
+**Why it's central**: This paper explicitly builds the framework for **steepest descent under a norm**, norm-smoothness, and "geometry determines when SignGD beats GD." It isolates why sign methods can be good *when the Hessian is diagonally concentrated and highly anisotropic*—a fundamentally **coordinate-dependent** condition, which motivates the rotational-invariance pitch for spectral geometry.
+
+**Critical insights**:
+- **Key takeaway for rotation experiment**: They isolate why sign methods can be good *when the Hessian is diagonally concentrated and highly anisotropic*—a fundamentally **coordinate-dependent** condition, which motivates the rotational-invariance pitch for spectral geometry.
+- **Limitation to flag**: Their "good regime" relies on **axis alignment** (via ℓ_∞-smoothness / diagonal structure). This is the right foil for the "spectral geometry is rotation invariant" claim, but it also means one should be careful not to claim that *any* non-Euclidean geometry is automatically "better"—it depends on *matching the right invariances*.
+
+</details>
+
+<details>
+<summary><b>3. How Muon's Spectral Design Benefits Generalization: A Study on Imbalanced Data</b> — <i>Vasudeva et al. (2025)</i></summary>
+
+[Paper Link](https://arxiv.org/abs/2510.22980)
+
+**Why it's central**: They explicitly define/analyze the **canonical SpecGD update** (polar factor / truncated SVD style) and give a mechanistic story: **GD learns principal components sequentially, SpecGD learns them more uniformly**, which is extremely aligned with the "high effective rank / flat spectrum helps" narrative.
+
+**Critical insights**:
+- **Strength**: It gives a *clean toy-model* justification for the effective-rank criterion, and a bridge to "why this might matter for generalization," not just training loss.
+- **Caveat**: The strongest theory is in stylized settings (Gaussian mixture + linear/bilinear/deep linear). The mechanism may not transfer unchanged to transformers; treat it as *evidence for plausibility*, not proof for LLMs.
+- **Actionable for experiments**: It suggests measuring *component-wise learning rates* / spectral bias effects, not only raw loss decrease.
+
+</details>
+
+<details>
+<summary><b>4. Preconditioned Spectral Descent for Deep Learning</b> — <i>Carlson et al. (NeurIPS 2015)</i></summary>
+
+[Paper Link](https://papers.neurips.cc/paper/2015/hash/8e6b42f1644ecb1327dc03ab345e618b-Abstract.html)
+
+**Why it's central**: This is the "classical" deep-learning origin of **spectral (Schatten-∞) steepest descent / SSD-style updates**, predating Muon. It already argues that non-Euclidean norms (including spectral) can give tighter progress bounds than Frobenius in certain models.
+
+**Critical insights**:
+- **Why it matters**: It's the strongest prior art to cite when claiming "spectral-norm geometry as a first-class optimizer design choice."
+- **Limitation**: Their setting and derivations were motivated by particular model classes (e.g., earlier deep probabilistic models) and rely on **majorization-style bounds** that don't automatically generalize to modern architectures; the contribution is partly to generalize the geometry cleanly.
+- **Practical note**: They also foreground the **computational bottleneck** of spectral steps (SVD-ish), which should be acknowledged when discussing "real Muon vs ideal SpecGD."
+
+</details>
+
+<details>
+<summary><b>5. Old Optimizer, New Norm: An Anthology</b> — <i>Bernstein & Newhouse (2024)</i></summary>
+
+[Paper Link](https://arxiv.org/abs/2409.20325)
+
+**Why it's central**: It's a high-level but influential framing: many optimizers can be viewed as **steepest descent under some norm** once you "switch off" certain moving averages. It specifically popularized the "Shampoo ↔ spectral descent" connection that helped revive interest in Muon-like spectral updates.
+
+**Critical insights**:
+- **Strength**: Great for "Related Work / Motivation" because it legitimizes the whole *norm geometry* design space and ties Muon to modern optimizer practice.
+- **But**: It is partly a **perspective / unification** paper. Some equivalences depend on idealizations (e.g., disabling accumulations), so treat it as framing rather than the *core theoretical foundation* for convergence claims.
+
+</details>
+
+<details>
+<summary><b>6. Understanding Gradient Orthogonalization for Deep Learning via Non-Euclidean Trust-Region Optimization</b> — <i>Kovalev (2025)</i></summary>
+
+[Paper Link](https://arxiv.org/abs/2503.12645)
+
+**Why it's central**: This is one of the cleanest "math-first" explanations of **Muon-style orthogonalized gradients**: it interprets orthogonalization as a **trust-region method in spectral norm**, and develops stochastic non-Euclidean trust-region theory with momentum that recovers Muon as a special case.
+
+**Critical insights**:
+- **Why it complements the proposal**: The proposal is steepest-descent geometry; Kovalev gives a *different but compatible* geometric lens (trust region) that helps justify "why orthogonalization is principled."
+- **Watch-out**: Trust-region analyses can yield bounds that are conservative in deep learning regimes; don't oversell quantitative tightness. But it's excellent for "Muon is not a hack; it's a non-Euclidean method."
+
+</details>
+
+<details>
+<summary><b>7. Muon Optimizes Under Spectral Norm Constraints</b> — <i>Chen, Li, Liu (2025)</i></summary>
+
+[Paper Link](https://arxiv.org/abs/2506.15054)
+
+**Why it's central**: It formalizes Muon within the **Lion-𝒦** family and argues Muon + decoupled weight decay implicitly solves a **spectral norm constrained** problem; i.e., it gives a theory story for **implicit regularization** tied exactly to spectral norms.
+
+**Critical insights**:
+- **Strength**: This is the cleanest citation for any claim like "Muon has an implicit spectral-norm control / constraint viewpoint."
+- **Limitation relative to the draft**: It's more about **implicit bias/regularization** than the progress-per-step / smoothness ratio story. So cite it to motivate why spectral geometry might change *which solution* you converge to—not just how fast.
+
+</details>
+
+<details>
+<summary><b>8. On the Convergence Analysis of Muon</b> — <i>Shen et al. (2025)</i></summary>
+
+[Paper Link](https://arxiv.org/abs/2505.23737)
+
+**Why it's central**: It's a dedicated Muon convergence analysis and explicitly tries to characterize **when Muon can outperform GD**, relating the rate to Hessian structure (e.g., low-rank/block structure phenomena).
+
+**Critical insights**:
+- **Strength**: Provides a "Muon vs GD" theory baseline to compare against and cite to show the work is part of a rapidly evolving theory effort.
+- **But**: Be careful aligning assumptions: many Muon analyses depend on structural Hessian properties or specific smoothness assumptions that may not match the norm-smoothness setup one-for-one.
+
+</details>
+
+<details>
+<summary><b>9. Training Deep Learning Models with Norm-Constrained LMOs</b> — <i>Pethick et al. (2025)</i></summary>
+
+[Paper Link](https://arxiv.org/abs/2502.07529)
+
+**Why it's central**: It unifies several methods (including SignSGD and Muon) through **linear minimization oracles over norm balls** (conditional-gradient style), argues these can be used even for unconstrained problems, and explicitly frames Muon as operating on a **spectral-norm ball**.
+
+**Critical insights**:
+- **Value**: It gives an alternate unifying language (LMO/CG) that may strengthen the "normed-space optimization" positioning.
+- **Mismatch to watch**: Their algorithmic family is not identical to *steepest descent*; it's easy to conflate the two. Cite it as "another unifying norm viewpoint," not as the source of the SpecGD convergence proof.
+
+</details>
+
+<details>
+<summary><b>10. signSGD: Compressed Optimisation for Non-Convex Problems</b> — <i>Bernstein et al. (2018)</i></summary>
+
+[Paper Link](https://arxiv.org/abs/1802.04434)
+
+**Why it's central**: This is the foundational signSGD convergence+geometry paper (and the majority-vote paper is key if mentioning robustness/communication). It explicitly compares to SignSGD.
+
+**Critical insights**:
+- **Most relevant bit**: They already emphasize that **(ℓ₁/ℓ₂)-type geometry of gradients/noise/curvature** matters for sign methods, which is conceptually parallel to the "nuclear/Frobenius ratio" criterion for spectral methods.
+- **Caveat**: Many theoretical regimes rely on assumptions (sometimes large-batch or specific noise models) that don't directly map to deterministic smoothness comparison, so avoid overclaiming equivalence.
+
+</details>
+
+### How These 10 Papers Map Onto SpecGD Proposal Claims
+
+- **"SpecGD is steepest descent in spectral norm"**: Carlson'15 + Bernstein/Newhouse'24 + Pethick'25 all reinforce the "non-Euclidean / normed-space optimizer" framing.
+- **"SpecGD beats GD when gradients have high effective rank"**: Davis'25 (nuclear rank) and Vasudeva'25 (balanced PC learning) are the two most direct supports.
+- **"Rotation invariance vs SignSGD axis-alignment"**: Balles'20 is the cleanest "SignGD needs diagonal-ish geometry" foil.
+- **"Muon theory context"**: Shen'25, Kovalev'25, Chen'25 collectively cover convergence, trust-region geometry, and implicit spectral-norm constraint interpretations.
+
+---
+
 ##  Table of Contents
 
+- [⭐ Top 10 Most Relevant Papers for SpecGD Proposal](#-top-10-most-relevant-papers-for-specgd-proposal)
 - [ Background: Spectral Bias and Adaptive Optimizers](#-background-spectral-bias-and-adaptive-optimizers)
 - [ Original Literature](#-original-literature)
 - [ Theoretical Analysis](#-theoretical-analysis)
