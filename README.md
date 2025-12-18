@@ -17,7 +17,7 @@
 
 [Paper Link](https://arxiv.org/abs/2512.04299)
 
-**Why it's central**: This paper provides the "missing empirical and theory bridge" for the **SpecGD>GD** condition. It gives a clean *layerwise* criterion comparing a **gradient nuclear-to-Frobenius ratio** ("nuclear rank") to **stable rank of activations**, and validates the low-stable-rank / high-nuclear-rank story on NanoGPT-scale training.
+This paper provides the "missing empirical and theory bridge" for the **SpecGD>GD** condition. It gives a clean *layerwise* criterion comparing a **gradient nuclear-to-Frobenius ratio** ("nuclear rank") to **stable rank of activations**, and validates the low-stable-rank / high-nuclear-rank story on NanoGPT-scale training.
 
 **Critical insights**:
 - Their core condition is *still* largely a **one-step guarantee**; it explains *when a spectral step is locally better*, not full training dynamics or final generalization.
