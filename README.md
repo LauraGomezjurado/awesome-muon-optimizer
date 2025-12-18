@@ -8,7 +8,7 @@
 
 ---
 
-## ⭐ Top 10 Most Relevant Papers for SpecGD Proposal
+## ⭐ Top 10 Most Relevant Papers
 
 > **Context**: This section highlights the 10 papers most directly relevant to understanding SpecGD as *steepest descent in the spectral norm*, deriving norm-smoothness-based convergence bounds, and establishing "when SpecGD beats GD" criteria in terms of effective rank/singular-value spread. These papers also emphasize rotational invariance as the key geometric distinction from SignSGD.
 
@@ -145,7 +145,7 @@
 
 </details>
 
-### How These 10 Papers Map Onto SpecGD Proposal Claims
+### How They Map
 
 - **"SpecGD is steepest descent in spectral norm"**: Carlson'15 + Bernstein/Newhouse'24 + Pethick'25 all reinforce the "non-Euclidean / normed-space optimizer" framing.
 - **"SpecGD beats GD when gradients have high effective rank"**: Davis'25 (nuclear rank) and Vasudeva'25 (balanced PC learning) are the two most direct supports.
@@ -156,7 +156,7 @@
 
 ##  Table of Contents
 
-- [⭐ Top 10 Most Relevant Papers for SpecGD Proposal](#-top-10-most-relevant-papers-for-specgd-proposal)
+- [⭐ Top 10 Most Relevant Papers](#-top-10-most-relevant-papers-for-specgd-proposal)
 - [ Background: Spectral Bias and Adaptive Optimizers](#-background-spectral-bias-and-adaptive-optimizers)
 - [ Original Literature](#-original-literature)
 - [ Theoretical Analysis](#-theoretical-analysis)
